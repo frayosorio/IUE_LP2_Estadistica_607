@@ -126,13 +126,40 @@ public class FrmEstadistica extends JFrame {
         return suma;
     }
 
+    public double promedio() {
+        double promedioCalculado = 0;
+        if (totalDatos >= 0) {
+            promedioCalculado = sumatoria() / (totalDatos + 1);
+        }
+        return promedioCalculado;
+    }
+
+    public double desviacionEstandar() {
+        double suma = 0;
+        double promedioCalculado = promedio();
+        for (int i = 0; i <= totalDatos; i++) {
+            suma += Math.abs(muestra[i] - promedioCalculado);
+        }
+        return totalDatos >= 1 ? suma / totalDatos : 0;
+        /*
+         * if (totalDatos >= 1) {
+         * return suma / totalDatos;
+         * } else {
+         * return 0;
+         * }
+         */
+    }
+
     private void calcularEstadistica() {
         switch (cmbEstadistica.getSelectedIndex()) {
             case 0:
                 txtEstadistica.setText(String.valueOf(sumatoria()));
                 break;
             case 1:
-
+                txtEstadistica.setText(String.valueOf(promedio()));
+                break;
+            case 2:
+                txtEstadistica.setText(String.valueOf(desviacionEstandar()));
                 break;
         }
     }
