@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 public class FrmEstadistica extends JFrame {
@@ -91,10 +93,14 @@ public class FrmEstadistica extends JFrame {
     private int totalDatos = -1;
 
     private void agregarDato() {
-        double dato = Double.parseDouble(txtDato.getText());
-        totalDatos++;
-        muestra[totalDatos] = dato;
-        mostrarMuestra();
+        try {
+            double dato = Double.parseDouble(txtDato.getText());
+            totalDatos++;
+            muestra[totalDatos] = dato;
+            mostrarMuestra();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Debe digitar un valor numérico");
+        }
         txtDato.setText("");
     }
 
@@ -118,7 +124,7 @@ public class FrmEstadistica extends JFrame {
         }
     }
 
-    public double sumatoria() {
+    private double sumatoria() {
         double suma = 0;
         for (int i = 0; i <= totalDatos; i++) {
             suma += muestra[i];
@@ -126,7 +132,7 @@ public class FrmEstadistica extends JFrame {
         return suma;
     }
 
-    public double promedio() {
+    private double promedio() {
         double promedioCalculado = 0;
         if (totalDatos >= 0) {
             promedioCalculado = sumatoria() / (totalDatos + 1);
@@ -134,7 +140,7 @@ public class FrmEstadistica extends JFrame {
         return promedioCalculado;
     }
 
-    public double desviacionEstandar() {
+    private double desviacionEstandar() {
         double suma = 0;
         double promedioCalculado = promedio();
         for (int i = 0; i <= totalDatos; i++) {
@@ -150,6 +156,16 @@ public class FrmEstadistica extends JFrame {
          */
     }
 
+    private double maximo() {
+        double mayor = muestra[0]; // asumir que el primer dato es el mayor
+        for (int i = 1; i <= totalDatos; i++) {
+            if (mayor < muestra[i]) {
+                mayor = muestra[i];
+            }
+        }
+        return mayor;
+    }
+
     private void calcularEstadistica() {
         switch (cmbEstadistica.getSelectedIndex()) {
             case 0:
@@ -160,6 +176,9 @@ public class FrmEstadistica extends JFrame {
                 break;
             case 2:
                 txtEstadistica.setText(String.valueOf(desviacionEstandar()));
+                break;
+            case 3:
+                txtEstadistica.setText(String.valueOf(maximo()));
                 break;
         }
     }
